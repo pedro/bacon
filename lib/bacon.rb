@@ -175,14 +175,14 @@ module Bacon
             rescued = true
             raise e
           ensure
-            if Counter[:requirements] == prev_req and not rescued
-              raise Error.new(:missing,
-                              "empty specification: #{@name} #{description}")
-            end
             begin
               @after.each { |block| instance_eval(&block) }
             rescue Object => e
               raise e  unless rescued
+            end
+            if Counter[:requirements] == prev_req and not rescued
+              raise Error.new(:missing,
+                              "empty specification: #{@name} #{description}")
             end
           end
         rescue Object => e
